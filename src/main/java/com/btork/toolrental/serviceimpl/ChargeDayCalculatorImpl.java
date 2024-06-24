@@ -22,6 +22,11 @@ import com.btork.toolrental.service.ChargeDayCalculator;
 @Service
 public class ChargeDayCalculatorImpl implements ChargeDayCalculator {
 
+	/**
+	 * Calculates the number of days the customer is charged for a tool over the
+	 * specified interval defined by startDate and duration. The toolCost specifies
+	 * which types of days are charged.
+	 */
 	@Override
 	public int calculateChargeDays(LocalDate startDate, int duration, ToolCost toolCost) {
 		int chargeDays = 0;
@@ -45,10 +50,20 @@ public class ChargeDayCalculatorImpl implements ChargeDayCalculator {
 		return chargeDays;
 	}
 
+	/**
+	 * Calculates if the date is a holiday
+	 * 
+	 * @param date the target date
+	 * @return true if date is a holiday
+	 */
 	private boolean isHoliday(LocalDate date) {
 		return isFourthOfJulyHoliday(date) || isLaborDayHoliday(date);
 	}
 
+	/**
+	 * @return true if the date is a 4th of july holiday. Note: the holiday may be
+	 *         observed on the 3rd or 5th if the 4th falls on a weekend.
+	 */
 	private boolean isFourthOfJulyHoliday(LocalDate date) {
 		Month month = date.getMonth();
 		if (!Month.JULY.equals(month)) {
@@ -74,6 +89,10 @@ public class ChargeDayCalculatorImpl implements ChargeDayCalculator {
 		return false;
 	}
 
+	/**
+	 * @return true if the date is labor day. Labor day is the first Monday in
+	 *         September.
+	 */
 	private boolean isLaborDayHoliday(LocalDate date) {
 		Month month = date.getMonth();
 		if (!Month.SEPTEMBER.equals(month)) {
@@ -91,6 +110,9 @@ public class ChargeDayCalculatorImpl implements ChargeDayCalculator {
 		return false;
 	}
 
+	/**
+	 * @return true if date is a weekend
+	 */
 	private boolean isWeekend(LocalDate date) {
 		DayOfWeek dayOfWeek = date.getDayOfWeek();
 		return DayOfWeek.SATURDAY.equals(dayOfWeek) || DayOfWeek.SUNDAY.equals(dayOfWeek);
