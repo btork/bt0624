@@ -7,6 +7,12 @@ import com.btork.toolrental.domain.RentalAgreement;
  */
 public interface ReceiptGenerator {
 
+	/**
+	 * Generates a Receipt from a RentalAgreement
+	 * 
+	 * @param rentalAgreement the rentalAgreement used to generate a receipt
+	 * @return the receipt
+	 */
 	public String generate(RentalAgreement rentalAgreement);
 
 }

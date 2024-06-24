@@ -22,11 +22,7 @@ import com.btork.toolrental.service.ChargeDayCalculator;
 @Service
 public class ChargeDayCalculatorImpl implements ChargeDayCalculator {
 
-	/**
-	 * Calculates the number of days the customer is charged for a tool over the
-	 * specified interval defined by startDate and duration. The toolCost specifies
-	 * which types of days are charged.
-	 */
+	// NOTE: Javadoc is in interface. IDE should find it.
 	@Override
 	public int calculateChargeDays(LocalDate startDate, int duration, ToolCost toolCost) {
 		int chargeDays = 0;

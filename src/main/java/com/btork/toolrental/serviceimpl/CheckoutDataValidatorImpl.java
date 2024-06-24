@@ -7,10 +7,14 @@ import com.btork.toolrental.dao.ToolSpecDao;
 import com.btork.toolrental.domain.CheckoutData;
 import com.btork.toolrental.domain.ToolSpec;
 import com.btork.toolrental.exceptions.InvalidCheckoutDataException;
-import com.btork.toolrental.exceptions.InvalidDiscountPercentException;
-import com.btork.toolrental.exceptions.InvalidRentalDayCountException;
 import com.btork.toolrental.service.CheckoutDataValidator;
 
+/**
+ * Validates the data constraints of a CheckoutData.
+ * 
+ * Note: Some constraints, such as format constraints (ex: valid numbers),
+ * are validated during input.
+ */
 @Service
 public class CheckoutDataValidatorImpl implements CheckoutDataValidator {
 	public static final int MIN_RENTAL_DAY_COUNT = 1;
@@ -26,9 +30,11 @@ public class CheckoutDataValidatorImpl implements CheckoutDataValidator {
 		this.toolSpecDao = toolSpecDao;
 	}
 
+	/**
+	 * Validate CheckoutData constraints
+	 */
 	@Override
-	public void validate(CheckoutData checkoutData)
-			throws InvalidRentalDayCountException, InvalidDiscountPercentException {
+	public void validate(CheckoutData checkoutData) {
 
 		if (checkoutData.getToolCode() == null || checkoutData.getToolCode().length() == 0) {
 			throw new InvalidCheckoutDataException("Tool Code is required");

@@ -18,6 +18,9 @@ import com.btork.toolrental.service.ChargeDayCalculator;
 import com.btork.toolrental.service.CheckoutDataProcessor;
 import com.btork.toolrental.service.CheckoutDataValidator;
 
+/**
+ * Processes the CheckoutData to create the RentalAgreement
+ */
 @Service
 public class CheckoutDataProcessorImpl implements CheckoutDataProcessor {
 
@@ -38,6 +41,10 @@ public class CheckoutDataProcessorImpl implements CheckoutDataProcessor {
 		this.chargeDayCalculator = chargeDayCalculator;
 	}
 
+	/**
+	 * Takes the rental data specified in the checkoutData and creates a
+	 * RentalAgreement that contains the details of the tool rental.
+	 */
 	@Override
 	public RentalAgreement performCheckout(CheckoutData checkoutData) {
 		checkoutDataValidator.validate(checkoutData);
@@ -56,8 +63,7 @@ public class CheckoutDataProcessorImpl implements CheckoutDataProcessor {
 
 		rentalAgreement.setRentalDays(checkoutData.getRentalDayCount());
 		rentalAgreement.setCheckoutDate(checkoutData.getCheckoutDate());
-		rentalAgreement
-				.setDueDate(calculateDueDate(checkoutData.getCheckoutDate(), checkoutData.getRentalDayCount() - 1));
+		rentalAgreement.setDueDate(calculateDueDate(checkoutData.getCheckoutDate(), checkoutData.getRentalDayCount()));
 
 		rentalAgreement.setDailyRentalCharge(toolCost.getDailyCost());
 		rentalAgreement.setChargeDays(
@@ -73,18 +79,48 @@ public class CheckoutDataProcessorImpl implements CheckoutDataProcessor {
 		return rentalAgreement;
 	}
 
+	/**
+	 * computes the end date of the rental
+	 * 
+	 * @param startDate the first day of the rental
+	 * @param duration  the number of days in the rental
+	 * @return the end date
+	 */
 	private LocalDate calculateDueDate(LocalDate startDate, int duration) {
-		return startDate.plusDays(duration);
+		return startDate.plusDays(duration - 1);
 	}
 
+	/**
+	 * Calculates the number of days to charge for the rental
+	 * 
+	 * @param startDate The start date of the rental
+	 * @param duration  the duration of the rental
+	 * @param toolCost  the cost parameters including daily cost and which days are
+	 *                  chargeable.
+	 * @return the number of chargeable days
+	 */
 	private int calculateChargeDays(LocalDate startDate, int duration, ToolCost toolCost) {
 		return chargeDayCalculator.calculateChargeDays(startDate, duration, toolCost);
 	}
 
-	private BigDecimal calculatePrediscountCharge(BigDecimal periodicCost, int numPeriods) {
-		return periodicCost.multiply(new BigDecimal(numPeriods));
+	/**
+	 * Calculates the cost of the rental before a discount is applied
+	 * 
+	 * @param dailyCost The cost for a day or rental
+	 * @param numDays   The number of days rented
+	 * @return The cost for the rental period
+	 */
+	private BigDecimal calculatePrediscountCharge(BigDecimal dailyCost, int numDays) {
+		return dailyCost.multiply(new BigDecimal(numDays));
 	}
 
+	/**
+	 * Calculates the discount amount
+	 * 
+	 * @param prediscountAmount The gross amount of the rental
+	 * @param discountPercent   The discount percentage
+	 * @return the total amount of the discount
+	 */
 	private BigDecimal calculateDiscountAmount(BigDecimal prediscountAmount, int discountPercent) {
 		return prediscountAmount.multiply(new BigDecimal(discountPercent).divide(new BigDecimal(100))).setScale(2,
 				RoundingMode.HALF_UP);

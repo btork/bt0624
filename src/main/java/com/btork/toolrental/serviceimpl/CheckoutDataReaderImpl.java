@@ -12,9 +12,19 @@ import com.btork.toolrental.domain.CheckoutData;
 import com.btork.toolrental.exceptions.InvalidCheckoutDataException;
 import com.btork.toolrental.service.CheckoutDataReader;
 
+/**
+ * Reads a CheckoutData from a Reader. Prompts are optionally generated. Prompts
+ * should be generated when data is being collected from a person using
+ * System.in. When generating a CheckoutData programmatically, prompts should
+ * not be used. Data can be supplied through one of the various Reader classes.
+ * This is useful for testing.
+ */
 @Service
 public class CheckoutDataReaderImpl implements CheckoutDataReader {
 
+	/**
+	 * Reads an input stream and creates a CheckoutData
+	 */
 	@Override
 	public CheckoutData read(Reader reader, boolean includePrompts) {
 		CheckoutData checkoutData = new CheckoutData();

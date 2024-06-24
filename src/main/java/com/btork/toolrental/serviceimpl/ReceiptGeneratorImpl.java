@@ -9,9 +9,15 @@ import org.springframework.stereotype.Service;
 import com.btork.toolrental.domain.RentalAgreement;
 import com.btork.toolrental.service.ReceiptGenerator;
 
+/**
+ * Creates Receipts for a rental transaction
+ */
 @Service
 public class ReceiptGeneratorImpl implements ReceiptGenerator {
 
+	/**
+	 * Generates a receipt for a RentalAgreement
+	 */
 	public String generate(RentalAgreement rentalAgreement) {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yy");
 		StringBuilder sb = new StringBuilder();
@@ -39,10 +45,16 @@ public class ReceiptGeneratorImpl implements ReceiptGenerator {
 		return sb.toString();
 	}
 
+	/**
+	 * Helper method to format currency values
+	 */
 	private String formatDollars(BigDecimal value) {
 		return NumberFormat.getCurrencyInstance().format(value);
 	}
 
+	/**
+	 * Helper method to format percentage.
+	 */
 	private String formatPercent(int value) {
 		return value + "%";
 	}
